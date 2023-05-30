@@ -20,9 +20,11 @@
     "format": "prettier --write src/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "init-msw": "msw init public/"
+    "init-msw": "msw init public/",
+    "test-storybook": "test-storybook"
   },
   "dependencies": {
+    "@storybook/test-runner": "^0.10.0",
     "pinia": "^2.1.3",
     "vue": "^3.2.47"
   },
