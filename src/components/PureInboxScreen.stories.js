@@ -19,7 +19,7 @@ export const Error = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     // Simulates pinning the first task
-    await fireEvent.click(canvas.getByLabelText('pinTask-1'));
+    await fireEvent.click(canvas.getByLabelText('pinTask-2'));
     // Simulates pinning the third task
     await fireEvent.click(canvas.getByLabelText('pinTask-3'));
   },
