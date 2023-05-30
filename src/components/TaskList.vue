@@ -1,48 +1,32 @@
 <template>
-  <div class="list-items">
-    <template v-if="loading"> loading </template>
-    <template v-else-if="isEmpty"> empty </template>
-    <template v-else>
-      <Task
-        v-for="task in tasks"
-        :key="task.id"
-        :task="task"
-        @archive-task="onArchiveTask"
-        @pin-task="onPinTask"
-      />
-    </template>
-  </div>
+  <PureTaskList :tasks="tasks" @archive-task="archiveTask" @pin-task="pinTask" />
 </template>
 
 <script>
-import Task from './Task.vue';
-import { reactive, computed } from 'vue';
+import PureTaskList from './PureTaskList.vue';
+
+import { computed } from 'vue';
+
+import { useTaskStore } from '../store';
 
 export default {
+  components: { PureTaskList },
   name: 'TaskList',
-  components: { Task },
-  props: {
-    tasks: { type: Array, required: true, default: () => [] },
-    loading: { type: Boolean, default: false },
-  },
-  emits: ['archive-task', 'pin-task'],
+  setup() {
+    //👇 Creates a store instance
+    const store = useTaskStore();
 
-  setup(props, { emit }) {
-    props = reactive(props);
+    //👇 Retrieves the tasks from the store's state auxiliary getter function
+    const tasks = computed(() => store.getFilteredTasks);
+
+    //👇 Dispatches the actions back to the store
+    const archiveTask = (task) => store.archiveTask(task);
+    const pinTask = (task) => store.pinTask(task);
+
     return {
-      isEmpty: computed(() => props.tasks.length === 0),
-      /**
-       * Event handler for archiving tasks
-       */
-      onArchiveTask(taskId) {
-        emit('archive-task', taskId);
-      },
-      /**
-       * Event handler for pinning tasks
-       */
-      onPinTask(taskId) {
-        emit('pin-task', taskId);
-      },
+      tasks,
+      archiveTask,
+      pinTask,
     };
   },
 };
